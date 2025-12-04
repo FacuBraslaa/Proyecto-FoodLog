@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodLog</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="background-layer"></div>
+    <header class="app-header hidden" id="appHeader">
+      <div class="brand">
+        <div class="brand-icon">Ψϴ</div>
+        <div class="brand-text">
+          <span class="brand-name">FoodLog</span>
+          <span class="brand-sub">Come bien, vive mejor</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span class="user-greeting" id="userGreeting"></span>
+        <button class="ghost-button inverse" id="logoutBtn" type="button">
+          Cerrar sesión
+        </button>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <section id="authView" class="auth-view card">
+        <div class="auth-tabs">
+          <button class="tab active" id="loginTab" type="button">Iniciar Sesión</button>
+          <button class="tab" id="registerTab" type="button">Crear Cuenta</button>
+        </div>
+
+        <div id="loginPanel" class="auth-panel">
+          <h1>Iniciar Sesión</h1>
+          <p class="muted">Accede a tu cuenta de FoodLog</p>
+          <form id="loginForm" class="form-grid">
+            <label class="field">
+              <span>Usuario</span>
+              <input
+                id="loginUsername"
+                name="username"
+                type="text"
+                placeholder="Ingresa tu usuario"
+                required
+              />
+            </label>
+            <label class="field">
+              <span>Contraseña</span>
+              <input
+                id="loginPassword"
+                name="password"
+                type="password"
+                placeholder="Ingresa tu contraseña"
+                required
+              />
+            </label>
+            <p class="tiny-note">Por ahora solo verificamos el usuario (sin contraseña).</p>
+            <button class="primary-button" type="submit">Ingresar</button>
+            <p class="helper">
+              ¿No tienes una cuenta?
+              <button class="link" id="toRegister" type="button">Regístrate</button>
+            </p>
+          </form>
+        </div>
+
+        <div id="registerPanel" class="auth-panel hidden">
+          <div class="back-row">
+            <button class="link" id="backToLogin" type="button">← Volver</button>
+          </div>
+          <h1>Crear Cuenta</h1>
+          <p class="muted">Regístrate en FoodLog</p>
+          <form id="registerForm" class="form-grid">
+            <label class="field">
+              <span>Usuario</span>
+              <input
+                id="registerUsername"
+                name="username"
+                type="text"
+                placeholder="Elige un nombre de usuario"
+                required
+              />
+            </label>
+            <label class="field">
+              <span>Email</span>
+              <input
+                id="registerEmail"
+                name="email"
+                type="email"
+                placeholder="tú@email.com"
+                required
+              />
+            </label>
+            <label class="field">
+              <span>Contraseña</span>
+              <input
+                id="registerPassword"
+                name="password"
+                type="password"
+                placeholder="Crea una contraseña"
+                required
+              />
+            </label>
+            <label class="field">
+              <span>Confirmar contraseña</span>
+              <input
+                id="registerPasswordConfirm"
+                name="passwordConfirm"
+                type="password"
+                placeholder="Confirma tu contraseña"
+                required
+              />
+            </label>
+            <button class="primary-button" type="submit">Crear Cuenta</button>
+            <p class="helper">
+              ¿Ya tienes una cuenta?
+              <button class="link" id="toLogin" type="button">Inicia sesión</button>
+            </p>
+          </form>
+        </div>
+      </section>
+
+      <section id="dashboardView" class="hidden">
+        <div class="grid">
+          <div class="card hero-card">
+            <div class="hero-header">
+              <h2>¿Qué comiste hoy?</h2>
+              <p class="muted">Busca o agrega tus alimentos</p>
+            </div>
+            <form id="searchForm" class="search-bar">
+              <input
+                id="searchInput"
+                type="search"
+                placeholder="Buscar alimento (ej: manzana, pollo, arroz...)"
+              />
+              <button class="search-button" type="submit" title="Buscar alimento">
+                🔍
+              </button>
+            </form>
+            <div class="search-actions">
+              <button class="ghost-button" id="toggleAddMeal" type="button">
+                + Agregar Comida Manualmente
+              </button>
+            </div>
+            <div id="searchResults" class="search-results"></div>
+          </div>
+
+          <div id="addMealCard" class="card collapsible hidden">
+            <div class="card-header">
+              <div>
+                <p class="eyebrow">Agregar Nueva Comida</p>
+                <h3>Registra tu comida en segundos</h3>
+              </div>
+              <button class="ghost-button" id="cancelAddMeal" type="button">Cancelar</button>
+            </div>
+            <form id="addMealForm" class="form-grid two-col">
+              <label class="field">
+                <span>Nombre del alimento</span>
+                <input
+                  id="mealFoodName"
+                  name="food_name"
+                  type="text"
+                  placeholder="Ej: Ensalada César"
+                  required
+                />
+              </label>
+              <label class="field">
+                <span>Tipo de comida</span>
+                <select id="mealType" name="meal_type" required>
+                  <option value="desayuno">Desayuno</option>
+                  <option value="almuerzo">Almuerzo</option>
+                  <option value="cena">Cena</option>
+                  <option value="merienda">Snack / Merienda</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Cantidad</span>
+                <input
+                  id="mealQuantity"
+                  name="quantity"
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  placeholder="Ej: 200"
+                  required
+                />
+              </label>
+              <label class="field">
+                <span>Unidad</span>
+                <input
+                  id="mealUnit"
+                  name="unit_label"
+                  type="text"
+                  placeholder="Ej: g, porción, taza"
+                  value="porción"
+                  required
+                />
+              </label>
+              <label class="field">
+                <span>Calorías por unidad</span>
+                <input
+                  id="mealCalories"
+                  name="calories_per_unit"
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="Ej: 350"
+                  required
+                />
+              </label>
+              <label class="field">
+                <span>Fecha y hora (opcional)</span>
+                <input id="mealDate" name="eaten_at" type="datetime-local" />
+              </label>
+              <div class="form-actions">
+                <button class="ghost-button" type="button" id="resetMealForm">Limpiar</button>
+                <button class="primary-button" type="submit">Agregar</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="card totals-card">
+            <p class="eyebrow">Calorías Totales del Día</p>
+            <p class="muted" id="todayLabel"></p>
+            <div class="kcal-number" id="dailyTotal">0 kcal</div>
+          </div>
+
+          <div class="card" id="addFoodCard">
+            <div class="card-header">
+              <div>
+                <p class="eyebrow">Nuevo alimento</p>
+                <h3>Agrega al catálogo</h3>
+              </div>
+            </div>
+            <form id="addFoodForm" class="form-grid two-col">
+              <label class="field">
+                <span>Nombre</span>
+                <input
+                  id="foodName"
+                  name="name"
+                  type="text"
+                  placeholder="Ej: Pan integral"
+                  required
+                />
+              </label>
+              <label class="field">
+                <span>Unidad</span>
+                <input
+                  id="foodUnit"
+                  name="unit_label"
+                  type="text"
+                  placeholder="Ej: rebanada (40 g)"
+                  value="porción"
+                  required
+                />
+              </label>
+              <label class="field">
+                <span>Calorías por unidad</span>
+                <input
+                  id="foodCalories"
+                  name="calories_per_unit"
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="Ej: 90"
+                  required
+                />
+              </label>
+              <div class="form-actions">
+                <button class="ghost-button" type="reset">Limpiar</button>
+                <button class="primary-button" type="submit">Guardar alimento</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="card meals-card">
+            <div class="card-header">
+              <div>
+                <p class="eyebrow">Comidas Registradas Hoy</p>
+                <h3>Tu día, de un vistazo</h3>
+              </div>
+              <button class="ghost-button" id="refreshData" type="button">Actualizar</button>
+            </div>
+            <div id="mealsList" class="meals-list"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast" class="toast hidden"></div>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
