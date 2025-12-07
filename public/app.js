@@ -99,29 +99,49 @@ function setCurrentUser(user) {
   }
 }
 
-async function loginUser(username) {
+async function loginUser(username, password, options = {}) {
   const trimmed = username?.trim();
-  if (!trimmed) {
-    showToast("Ingresa tu usuario", "error");
-    return;
+  if (!trimmed || !password) {
+    showToast("Ingresa tu usuario y contraseña", "error");
+    return false;
+  }
+
+  const loginBtn = els.loginForm.querySelector(".primary-button");
+  const original = loginBtn.textContent;
+  if (!options.silent) {
+    loginBtn.disabled = true;
+    loginBtn.textContent = "Ingresando...";
   }
 
   try {
-    const res = await fetch(`${API_BASE}/users`);
-    if (!res.ok) throw new Error("No se pudo obtener usuarios");
-    const users = await res.json();
-    const user = users.find(
-      (u) => u.username?.toLowerCase() === trimmed.toLowerCase(),
-    );
-    if (!user) {
-      showToast("Usuario no encontrado. Regístrate primero.", "error");
-      return;
+    const res = await fetch(`${API_BASE}/users/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: trimmed, password }),
+    });
+    if (!res.ok) {
+      let errMsg = "Usuario o contraseña incorrectos";
+      try {
+        const err = await res.json();
+        errMsg = err.error || errMsg;
+      } catch (_ignore) {
+        errMsg = `${errMsg} (HTTP ${res.status})`;
+      }
+      throw new Error(errMsg);
     }
+    const user = await res.json();
     setCurrentUser(user);
     showToast(`Bienvenido, ${user.username}!`);
+    return true;
   } catch (err) {
     console.error(err);
-    showToast("No se pudo iniciar sesión", "error");
+    showToast(err.message || "No se pudo iniciar sesión", "error");
+    return false;
+  } finally {
+    if (!options.silent) {
+      loginBtn.disabled = false;
+      loginBtn.textContent = original;
+    }
   }
 }
 
@@ -135,20 +155,37 @@ async function registerUser({ username, email, password }) {
     const res = await fetch(`${API_BASE}/users`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, email, password }),
+      body: JSON.stringify({ username: username.trim(), email: email.trim(), password }),
     });
 
     if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || "No se pudo crear la cuenta");
+      // Intentamos extraer error legible
+      let errMsg = "No se pudo crear la cuenta";
+      try {
+        const err = await res.json();
+        errMsg = err.error || errMsg;
+      } catch (_ignore) {
+        errMsg = `${errMsg} (HTTP ${res.status})`;
+      }
+      if (res.status === 409) {
+        errMsg = errMsg || "Usuario o email ya registrado";
+      }
+      throw new Error(errMsg);
     }
 
     const user = await res.json();
-    showToast("Cuenta creada con éxito 🎉 Ahora inicia sesión.");
-    switchAuthTab("login");
-    document.getElementById("loginUsername").value = user.username || username;
-    document.getElementById("loginPassword").value = "";
-    els.authView.scrollIntoView({ behavior: "smooth" });
+    showToast("Cuenta creada con éxito 🎉 Iniciando sesión...");
+    // Intentamos loguear automáticamente
+    const finalUsername = user.username || username;
+    document.getElementById("loginUsername").value = finalUsername;
+    document.getElementById("loginPassword").value = password;
+    const loggedIn = await loginUser(finalUsername, password, { silent: true });
+
+    if (!loggedIn) {
+      showToast("Cuenta creada. Inicia sesión con tus credenciales.", "error");
+      switchAuthTab("login");
+      els.authView.scrollIntoView({ behavior: "smooth" });
+    }
   } catch (err) {
     console.error(err);
     showToast(err.message || "No se pudo crear la cuenta", "error");
@@ -397,7 +434,8 @@ function bindEvents() {
   els.loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const username = document.getElementById("loginUsername").value;
-    loginUser(username);
+    const password = document.getElementById("loginPassword").value;
+    loginUser(username, password);
   });
 
   els.registerForm.addEventListener("submit", (e) => {
@@ -409,6 +447,11 @@ function bindEvents() {
 
     if (!username || !email || !password) {
       showToast("Completa usuario, email y contraseña", "error");
+      return;
+    }
+
+    if (password.length < 6) {
+      showToast("La contraseña debe tener al menos 6 caracteres", "error");
       return;
     }
 
