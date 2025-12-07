@@ -1,11 +1,5 @@
-<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="128" cy="128" r="128" fill="#DBE9FF" />
-  <g fill="#1F6FFF">
-    <rect x="82" y="52" width="16" height="88" rx="8" />
-    <rect x="106" y="52" width="16" height="88" rx="8" />
-    <rect x="130" y="52" width="16" height="88" rx="8" />
-    <rect x="106" y="128" width="16" height="76" rx="8" />
-    <path d="M168 52c-13.255 0-24 10.745-24 24v38c0 13.255 10.745 24 24 24h10v66c0 4.418 3.582 8 8 8s8-3.582 8-8V68c0-8.837-7.163-16-16-16h-10z" />
-  </g>
-  <rect x="166" y="84" width="20" height="52" rx="10" fill="#DBE9FF" />
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M6 4V18C6 20.2 7.8 22 10 22H18C19.0609 22 20.0783 21.5786 20.8284 20.8284C21.5786 20.0783 22 19.0609 22 18V4" stroke="#155DFC" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14 4V44" stroke="#155DFC" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M42 30V4C39.3478 4 36.8043 5.05357 34.9289 6.92893C33.0536 8.8043 32 11.3478 32 14V26C32 28.2 33.8 30 36 30H42ZM42 30V44" stroke="#155DFC" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

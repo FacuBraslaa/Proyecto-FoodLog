@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import logo from "./assets/logo.svg";
 
-const API_BASE = import.meta.env.VITE_API_BASE || "";
+const API_BASE =
+  (import.meta.env.VITE_API_BASE || "").replace(/\/$/, "") ||
+  (import.meta.env.DEV ? "http://localhost:3000" : "");
 
 const mealTypeLabels = {
   desayuno: "Desayuno",

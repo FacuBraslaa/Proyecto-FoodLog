@@ -6,7 +6,7 @@
 - `npm run build` / `npm run preview`
 
 ## Configuración
-Define la URL de la API en `.env`:
+La app se conecta por defecto a `http://localhost:3000` en modo desarrollo. Si usas otra URL, defínela en `.env`:
 ```
 VITE_API_BASE=http://localhost:3000
 ```
