@@ -34,7 +34,7 @@ export async function createFood(req, res, next) {
   }
 }
 
-// Lista alimentos, con filtro opcional por nombre (?q=...)
+// Lista alimentos, con filtro opcional por nombre 
 export async function listFoods(req, res, next) {
   try {
     const { q } = req.query;
