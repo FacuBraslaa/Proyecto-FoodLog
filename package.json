@@ -1,13 +1,18 @@
 {
-  "name": "proyecto-foodlog-workspace",
-  "private": true,
+  "name": "proyecto-foodlog-backend",
   "version": "1.0.0",
+  "type": "module",
+  "main": "backend/index.js",
   "scripts": {
-    "dev": "npm run dev --prefix backend & npm run dev --prefix frontend",
-    "dev:backend": "npm run dev --prefix backend",
-    "dev:frontend": "npm run dev --prefix frontend"
+    "start": "node backend/index.js",
+    "dev": "node backend/index.js",
+    "test-db": "node backend/test-db.js",
+    "dev:all": "bash scripts/dev-all.sh"
   },
   "dependencies": {
-    "vercel": "^49.1.1"
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2",
+    "pg": "^8.16.3"
   }
 }
